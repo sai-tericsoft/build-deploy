@@ -9,7 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -18,25 +20,34 @@ jobs:
 
       - name: Install yarn dependencies
         run: yarn install
+        working-directory: ./path-to-your-project-directory # Update this to your actual project directory
+
       - name: Run build task
         run: yarn build:dev
+        working-directory: ./path-to-your-project-directory # Update this to your actual project directory
         
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build
+          path: ./path-to-your-project-directory/build # Update this to your actual build directory
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
+      - name: Deploy
+        run: echo "Deploying..."
+        # Add your deployment commands here
 
 
     #   - name: Configure AWS credentials
